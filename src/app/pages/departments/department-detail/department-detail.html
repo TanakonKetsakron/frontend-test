@@ -1,0 +1,37 @@
+<div style="padding:16px">
+  <a routerLink="/departments" style="color:#1976d2; text-decoration:none">← กลับ</a>
+
+  <div *ngIf="loading" style="text-align:center; padding:40px">กำลังโหลด...</div>
+
+  <div *ngIf="department">
+    <div style="display:flex; align-items:center; gap:12px; margin:16px 0">
+      <h2 style="margin:0">{{ department.name }}</h2>
+      <span style="background:#1976d2; color:white; padding:4px 12px; border-radius:12px">
+        {{ department.user_count }} คน
+      </span>
+    </div>
+
+    <div *ngIf="department.users?.length === 0" style="color:#999">ไม่มีสมาชิกในแผนกนี้</div>
+
+    <table *ngIf="department.users?.length > 0" style="width:100%; border-collapse:collapse">
+      <thead>
+        <tr style="background:#f5f5f5">
+          <th style="padding:10px; border:1px solid #ddd; text-align:left">ชื่อ-นามสกุล</th>
+          <th style="padding:10px; border:1px solid #ddd; text-align:left">อายุ</th>
+          <th style="padding:10px; border:1px solid #ddd; text-align:left">อีเมล</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of department.users">
+          <td style="padding:10px; border:1px solid #ddd">
+            <a [routerLink]="['/users', u.id]" style="color:#1976d2; text-decoration:none">
+              {{ u.first_name }} {{ u.last_name }}
+            </a>
+          </td>
+          <td style="padding:10px; border:1px solid #ddd">{{ u.age }}</td>
+          <td style="padding:10px; border:1px solid #ddd">{{ u.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

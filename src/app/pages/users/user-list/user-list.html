@@ -1,0 +1,96 @@
+<div style="padding: 16px">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+    <h2 style="margin:0">Users</h2>
+    <a routerLink="/create" style="padding:8px 16px; background:#1976d2; color:white; text-decoration:none; border-radius:4px">+ เพิ่ม User</a>
+  </div>
+
+  <!-- Filters -->
+  <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap">
+    <input type="text" placeholder="ค้นหาชื่อ / อีเมล..." [(ngModel)]="search"
+      (input)="onSearchChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px; min-width:200px"/>
+
+    <select [(ngModel)]="gender" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
+      <option value="">เพศ: ทั้งหมด</option>
+      <option value="male">ชาย</option>
+      <option value="female">หญิง</option>
+      <option value="unspecified">ไม่ระบุ</option>
+    </select>
+
+    <select [(ngModel)]="department_id" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
+      <option value="">แผนก: ทั้งหมด</option>
+      <option *ngFor="let d of departments" [value]="d.id">{{ d.name }}</option>
+    </select>
+
+    <select [(ngModel)]="sort" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
+      <option value="">เรียงลำดับ</option>
+      <option value="u.first_name">ชื่อ</option>
+      <option value="u.last_name">นามสกุล</option>
+      <option value="u.age">อายุ</option>
+      <option value="u.created_at">วันที่สร้าง</option>
+      <option value="d.name">แผนก</option>
+    </select>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" style="text-align:center; padding:40px; color:#666">กำลังโหลด...</div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && users.length === 0" style="text-align:center; padding:40px; color:#999">ไม่พบข้อมูล</div>
+
+  <!-- Table -->
+  <table *ngIf="!loading && users.length > 0" style="width:100%; border-collapse:collapse">
+    <thead>
+      <tr style="background:#f5f5f5">
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">ชื่อ-นามสกุล</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">อายุ</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">เพศ</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">อีเมล</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">เบอร์โทร</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">แผนก</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">จังหวัด</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:left">จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of users" style="border-bottom:1px solid #eee">
+        <td style="padding:10px; border:1px solid #ddd">
+          <a [routerLink]="['/users', u.id]" style="color:#1976d2; text-decoration:none">
+            {{ u.first_name }} {{ u.last_name }}
+          </a>
+        </td>
+        <td style="padding:10px; border:1px solid #ddd">{{ u.age }}</td>
+        <td style="padding:10px; border:1px solid #ddd">
+          <span [ngStyle]="{'background': u.gender==='male' ? '#bbdefb' : u.gender==='female' ? '#f8bbd9' : '#e0e0e0',
+                            'padding': '2px 8px', 'border-radius': '12px', 'font-size': '12px'}">
+            {{ u.gender === 'male' ? 'ชาย' : u.gender === 'female' ? 'หญิง' : 'ไม่ระบุ' }}
+          </span>
+        </td>
+        <td style="padding:10px; border:1px solid #ddd">{{ u.email }}</td>
+        <td style="padding:10px; border:1px solid #ddd">{{ u.phone || '–' }}</td>
+        <td style="padding:10px; border:1px solid #ddd">
+          <span *ngIf="u.department" style="background:#c8e6c9; padding:2px 8px; border-radius:12px; font-size:12px">
+            {{ u.department.name }}
+          </span>
+          <span *ngIf="!u.department" style="background:#e0e0e0; padding:2px 8px; border-radius:12px; font-size:12px; color:#666">
+            ไม่มีแผนก
+          </span>
+        </td>
+        <td style="padding:10px; border:1px solid #ddd">{{ u.address?.province || '–' }}</td>
+        <td style="padding:10px; border:1px solid #ddd">
+          <a [routerLink]="['/edit', u.id]" style="margin-right:8px; color:#1976d2">แก้ไข</a>
+          <button (click)="deleteUser(u.id, u.first_name + ' ' + u.last_name)"
+            style="background:#e53935; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer">ลบ</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages > 1" style="display:flex; gap:8px; margin-top:16px; align-items:center">
+    <button (click)="changePage(page-1)" [disabled]="page === 1"
+      style="padding:6px 12px; cursor:pointer">← ก่อนหน้า</button>
+    <span>หน้า {{ page }} / {{ totalPages }}</span>
+    <button (click)="changePage(page+1)" [disabled]="page === totalPages"
+      style="padding:6px 12px; cursor:pointer">ถัดไป →</button>
+  </div>
+</div>

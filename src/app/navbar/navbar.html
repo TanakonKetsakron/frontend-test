@@ -1,0 +1,15 @@
+<nav style="background:#1976d2; padding:12px 24px; display:flex; align-items:center; gap:24px">
+  <span style="color:white; font-weight:bold; font-size:18px">HR System</span>
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+    style="color:rgba(255,255,255,0.85); text-decoration:none; font-size:15px">
+    👤 Users
+  </a>
+  <a routerLink="/departments" routerLinkActive="active"
+    style="color:rgba(255,255,255,0.85); text-decoration:none; font-size:15px">
+    🏢 Departments
+  </a>
+</nav>
+
+<style>
+  a.active { color:white !important; border-bottom: 2px solid white; padding-bottom:2px; }
+</style>

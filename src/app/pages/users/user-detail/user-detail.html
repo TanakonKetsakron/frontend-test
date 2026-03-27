@@ -1,0 +1,48 @@
+<div style="padding:16px; max-width:600px">
+  <a routerLink="/" style="color:#1976d2; text-decoration:none">← กลับ</a>
+
+  <div *ngIf="loading" style="text-align:center; padding:40px">กำลังโหลด...</div>
+
+  <div *ngIf="user" style="margin-top:16px">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+      <h2 style="margin:0">{{ user.first_name }} {{ user.last_name }}</h2>
+      <a [routerLink]="['/edit', user.id]"
+        style="padding:8px 16px; background:#1976d2; color:white; text-decoration:none; border-radius:4px">
+        ✏️ แก้ไข
+      </a>
+    </div>
+
+    <div style="background:white; border:1px solid #ddd; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:10px">
+      <div style="display:flex; gap:8px">
+        <span style="color:#666; width:120px">เพศ</span>
+        <span>{{ user.gender === 'male' ? 'ชาย' : user.gender === 'female' ? 'หญิง' : 'ไม่ระบุ' }}</span>
+      </div>
+      <div style="display:flex; gap:8px">
+        <span style="color:#666; width:120px">อายุ</span>
+        <span>{{ user.age }} ปี</span>
+      </div>
+      <div style="display:flex; gap:8px">
+        <span style="color:#666; width:120px">อีเมล</span>
+        <span>{{ user.email }}</span>
+      </div>
+      <div style="display:flex; gap:8px">
+        <span style="color:#666; width:120px">เบอร์โทร</span>
+        <span>{{ user.phone || '–' }}</span>
+      </div>
+      <div style="display:flex; gap:8px">
+        <span style="color:#666; width:120px">แผนก</span>
+        <a *ngIf="user.department" [routerLink]="['/departments', user.department.id]"
+          style="color:#1976d2; text-decoration:none">{{ user.department.name }}</a>
+        <span *ngIf="!user.department" style="color:#999">ไม่มีแผนก</span>
+      </div>
+    </div>
+
+    <div *ngIf="user.address" style="margin-top:16px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; padding:16px">
+      <strong style="display:block; margin-bottom:10px">📍 ที่อยู่</strong>
+      <div>{{ user.address.house_no }}<span *ngIf="user.address.street"> ถ.{{ user.address.street }}</span></div>
+      <div>{{ user.address.district }}, {{ user.address.province }} {{ user.address.postal_code }}</div>
+    </div>
+
+    <div *ngIf="!user.address" style="margin-top:16px; color:#999">ไม่มีที่อยู่</div>
+  </div>
+</div>

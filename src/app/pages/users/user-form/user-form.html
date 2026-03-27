@@ -1,0 +1,116 @@
+<div style="padding:16px; max-width:600px">
+  <h2>{{ id ? 'แก้ไข User' : 'เพิ่ม User' }}</h2>
+
+  <div style="display:flex; flex-direction:column; gap:10px">
+
+    <div style="display:flex; gap:10px">
+      <div style="flex:1">
+        <label>ชื่อ *</label><br>
+        <input [(ngModel)]="form.first_name" placeholder="ชื่อ"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+      </div>
+      <div style="flex:1">
+        <label>นามสกุล *</label><br>
+        <input [(ngModel)]="form.last_name" placeholder="นามสกุล"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px">
+      <div style="flex:1">
+        <label>อายุ *</label><br>
+        <input [(ngModel)]="form.age" type="number" placeholder="อายุ"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+      </div>
+      <div style="flex:1">
+        <label>เพศ *</label><br>
+        <select [(ngModel)]="form.gender"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+          <option value="">เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="unspecified">ไม่ระบุ</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label>อีเมล *</label><br>
+      <input [(ngModel)]="form.email" placeholder="อีเมล" type="email"
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+    </div>
+
+    <div>
+      <label>เบอร์โทร</label><br>
+      <input [(ngModel)]="form.phone" placeholder="เบอร์โทร"
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+    </div>
+
+    <div>
+      <label>แผนก</label><br>
+      <select [(ngModel)]="form.department_id"
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+        <option value="">ไม่มีแผนก</option>
+        <option *ngFor="let d of departments" [value]="d.id">{{ d.name }}</option>
+      </select>
+    </div>
+
+    <!-- Address Toggle -->
+    <div style="margin-top:8px">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+        <input type="checkbox" [checked]="showAddress" (change)="toggleAddress()">
+        <strong>มีที่อยู่</strong>
+      </label>
+    </div>
+
+    <div *ngIf="showAddress" style="background:#f9f9f9; padding:12px; border-radius:8px; display:flex; flex-direction:column; gap:10px">
+      <div>
+        <label>บ้านเลขที่ *</label><br>
+        <input [(ngModel)]="form.address.house_no" placeholder="บ้านเลขที่"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+      </div>
+      <div>
+        <label>ถนน</label><br>
+        <input [(ngModel)]="form.address.street" placeholder="ถนน (ไม่บังคับ)"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+      </div>
+      <div style="display:flex; gap:10px">
+        <div style="flex:1">
+          <label>อำเภอ/เขต *</label><br>
+          <input [(ngModel)]="form.address.district" placeholder="อำเภอ/เขต"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+        </div>
+        <div style="flex:1">
+          <label>จังหวัด *</label><br>
+          <input [(ngModel)]="form.address.province" placeholder="จังหวัด"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+        </div>
+      </div>
+      <div>
+        <label>รหัสไปรษณีย์ *</label><br>
+        <input [(ngModel)]="form.address.postal_code" placeholder="รหัสไปรษณีย์ 5 หลัก" maxlength="5"
+          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
+        <small *ngIf="form.address?.postal_code && !/^\d{5}$/.test(form.address.postal_code)"
+          style="color:red">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</small>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMsg" style="color:red; background:#ffebee; padding:8px; border-radius:4px">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button (click)="submit()" [disabled]="loading"
+        style="padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:4px; cursor:pointer">
+        {{ loading ? 'กำลังบันทึก...' : 'บันทึก' }}
+      </button>
+      <button routerLink="/"
+        style="padding:10px 24px; background:#eee; border:none; border-radius:4px; cursor:pointer">
+        ยกเลิก
+      </button>
+    </div>
+
+  </div>
+</div>
