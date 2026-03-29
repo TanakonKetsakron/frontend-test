@@ -1,96 +1,154 @@
-<div style="padding: 16px">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
-    <h2 style="margin:0">Users</h2>
-    <a routerLink="/create" style="padding:8px 16px; background:#1976d2; color:white; text-decoration:none; border-radius:4px">+ เพิ่ม User</a>
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>👥 รายชื่อผู้ใช้</h1>
+      @if (!loading && !error) {
+        <span class="total-badge">ทั้งหมด {{ total }} คน</span>
+      }
+    </div>
+    <a routerLink="/create" class="btn-add">
+      <span>➕</span> เพิ่มผู้ใช้ใหม่
+    </a>
   </div>
 
   <!-- Filters -->
-  <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap">
-    <input type="text" placeholder="ค้นหาชื่อ / อีเมล..." [(ngModel)]="search"
-      (input)="onSearchChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px; min-width:200px"/>
+  <div class="filters-card">
+    <div class="filters-row">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="ค้นหาชื่อ, นามสกุล, อีเมล..." 
+               [(ngModel)]="search" (input)="onSearchChange()">
+      </div>
 
-    <select [(ngModel)]="gender" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
-      <option value="">เพศ: ทั้งหมด</option>
-      <option value="male">ชาย</option>
-      <option value="female">หญิง</option>
-      <option value="unspecified">ไม่ระบุ</option>
-    </select>
+      <select [(ngModel)]="gender" (change)="onFilterChange()" class="filter-select">
+        <option value="">เพศ: ทั้งหมด</option>
+        <option value="male">👨 ชาย</option>
+        <option value="female">👩 หญิง</option>
+        <option value="unspecified">🧑 ไม่ระบุ</option>
+      </select>
 
-    <select [(ngModel)]="department_id" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
-      <option value="">แผนก: ทั้งหมด</option>
-      <option *ngFor="let d of departments" [value]="d.id">{{ d.name }}</option>
-    </select>
+      <select [(ngModel)]="department_id" (change)="onFilterChange()" class="filter-select">
+        <option value="">แผนก: ทั้งหมด</option>
+        @for (d of departments; track d.id) {
+          <option [value]="d.id">{{ d.name }}</option>
+        }
+      </select>
 
-    <select [(ngModel)]="sort" (change)="onFilterChange()" style="padding:8px; border:1px solid #ccc; border-radius:4px">
-      <option value="">เรียงลำดับ</option>
-      <option value="u.first_name">ชื่อ</option>
-      <option value="u.last_name">นามสกุล</option>
-      <option value="u.age">อายุ</option>
-      <option value="u.created_at">วันที่สร้าง</option>
-      <option value="d.name">แผนก</option>
-    </select>
+      <select [(ngModel)]="sort" (change)="onFilterChange()" class="filter-select">
+        <option value="">เรียงตาม: ค่าเริ่มต้น</option>
+        <option value="u.first_name">ชื่อ (ก-ฮ)</option>
+        <option value="u.last_name">นามสกุล (ก-ฮ)</option>
+        <option value="u.age">อายุ</option>
+        <option value="u.created_at">วันที่สร้าง</option>
+        <option value="d.name">แผนก</option>
+      </select>
+    </div>
   </div>
 
-  <!-- Loading -->
-  <div *ngIf="loading" style="text-align:center; padding:40px; color:#666">กำลังโหลด...</div>
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="state-container">
+      <div class="loading-spinner"></div>
+      <p class="state-text">กำลังโหลดข้อมูล...</p>
+    </div>
+  }
 
-  <!-- Empty -->
-  <div *ngIf="!loading && users.length === 0" style="text-align:center; padding:40px; color:#999">ไม่พบข้อมูล</div>
+  <!-- Error State -->
+  @if (!loading && error) {
+    <div class="state-container error-state">
+      <div class="state-icon">❌</div>
+      <h3>เกิดข้อผิดพลาด</h3>
+      <p class="state-text">{{ error }}</p>
+      <button (click)="retry()" class="btn-retry">
+        <span>🔄</span> ลองใหม่อีกครั้ง
+      </button>
+    </div>
+  }
 
-  <!-- Table -->
-  <table *ngIf="!loading && users.length > 0" style="width:100%; border-collapse:collapse">
-    <thead>
-      <tr style="background:#f5f5f5">
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">ชื่อ-นามสกุล</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">อายุ</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">เพศ</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">อีเมล</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">เบอร์โทร</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">แผนก</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">จังหวัด</th>
-        <th style="padding:10px; border:1px solid #ddd; text-align:left">จัดการ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let u of users" style="border-bottom:1px solid #eee">
-        <td style="padding:10px; border:1px solid #ddd">
-          <a [routerLink]="['/users', u.id]" style="color:#1976d2; text-decoration:none">
-            {{ u.first_name }} {{ u.last_name }}
-          </a>
-        </td>
-        <td style="padding:10px; border:1px solid #ddd">{{ u.age }}</td>
-        <td style="padding:10px; border:1px solid #ddd">
-          <span [ngStyle]="{'background': u.gender==='male' ? '#bbdefb' : u.gender==='female' ? '#f8bbd9' : '#e0e0e0',
-                            'padding': '2px 8px', 'border-radius': '12px', 'font-size': '12px'}">
-            {{ u.gender === 'male' ? 'ชาย' : u.gender === 'female' ? 'หญิง' : 'ไม่ระบุ' }}
-          </span>
-        </td>
-        <td style="padding:10px; border:1px solid #ddd">{{ u.email }}</td>
-        <td style="padding:10px; border:1px solid #ddd">{{ u.phone || '–' }}</td>
-        <td style="padding:10px; border:1px solid #ddd">
-          <span *ngIf="u.department" style="background:#c8e6c9; padding:2px 8px; border-radius:12px; font-size:12px">
-            {{ u.department.name }}
-          </span>
-          <span *ngIf="!u.department" style="background:#e0e0e0; padding:2px 8px; border-radius:12px; font-size:12px; color:#666">
-            ไม่มีแผนก
-          </span>
-        </td>
-        <td style="padding:10px; border:1px solid #ddd">{{ u.address?.province || '–' }}</td>
-        <td style="padding:10px; border:1px solid #ddd">
-          <a [routerLink]="['/edit', u.id]" style="margin-right:8px; color:#1976d2">แก้ไข</a>
-          <button (click)="deleteUser(u.id, u.first_name + ' ' + u.last_name)"
-            style="background:#e53935; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer">ลบ</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Empty State -->
+  @if (!loading && !error && users.length === 0) {
+    <div class="state-container empty-state">
+      <div class="state-icon">📭</div>
+      <h3>ไม่พบข้อมูล</h3>
+      <p class="state-text">ไม่มีผู้ใช้ที่ตรงกับเงื่อนไขการค้นหา</p>
+      <a routerLink="/create" class="btn-add-empty">
+        <span>➕</span> เพิ่มผู้ใช้ใหม่
+      </a>
+    </div>
+  }
 
-  <!-- Pagination -->
-  <div *ngIf="totalPages > 1" style="display:flex; gap:8px; margin-top:16px; align-items:center">
-    <button (click)="changePage(page-1)" [disabled]="page === 1"
-      style="padding:6px 12px; cursor:pointer">← ก่อนหน้า</button>
-    <span>หน้า {{ page }} / {{ totalPages }}</span>
-    <button (click)="changePage(page+1)" [disabled]="page === totalPages"
-      style="padding:6px 12px; cursor:pointer">ถัดไป →</button>
-  </div>
+  <!-- Data Table -->
+  @if (!loading && !error && users.length > 0) {
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ชื่อ-นามสกุล</th>
+            <th>อายุ</th>
+            <th>เพศ</th>
+            <th>อีเมล</th>
+            <th>เบอร์โทร</th>
+            <th>แผนก</th>
+            <th>จังหวัด</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users; track u.id) {
+            <tr [class.deleting]="deleting === u.id">
+              <td>
+                <a [routerLink]="['/users', u.id]" class="user-link">
+                  {{ u.first_name }} {{ u.last_name }}
+                </a>
+              </td>
+              <td>{{ u.age }} ปี</td>
+              <td>
+                <span class="badge" [class]="'badge-' + u.gender">
+                  {{ u.gender === 'male' ? '👨 ชาย' : u.gender === 'female' ? '👩 หญิง' : '🧑 ไม่ระบุ' }}
+                </span>
+              </td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.phone || '–' }}</td>
+              <td>
+                @if (u.department) {
+                  <span class="badge badge-dept">{{ u.department.name }}</span>
+                } @else {
+                  <span class="badge badge-none">ไม่มีแผนก</span>
+                }
+              </td>
+              <td>{{ u.address?.province || '–' }}</td>
+              <td class="actions-cell">
+                <a [routerLink]="['/edit', u.id]" class="btn-edit" title="แก้ไข">
+                  ✏️
+                </a>
+                <button (click)="deleteUser(u.id, u.first_name + ' ' + u.last_name)"
+                        [disabled]="deleting === u.id"
+                        class="btn-delete" title="ลบ">
+                  @if (deleting === u.id) {
+                    <span class="mini-spinner"></span>
+                  } @else {
+                    🗑️
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <div class="pagination">
+        <button (click)="changePage(page-1)" [disabled]="page === 1" class="page-btn">
+          ← ก่อนหน้า
+        </button>
+        <span class="page-info">หน้า {{ page }} / {{ totalPages }}</span>
+        <button (click)="changePage(page+1)" [disabled]="page === totalPages" class="page-btn">
+          ถัดไป →
+        </button>
+      </div>
+    }
+  }
 </div>

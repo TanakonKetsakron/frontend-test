@@ -1,15 +1,122 @@
-<nav style="background:#1976d2; padding:12px 24px; display:flex; align-items:center; gap:24px">
-  <span style="color:white; font-weight:bold; font-size:18px">HR System</span>
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
-    style="color:rgba(255,255,255,0.85); text-decoration:none; font-size:15px">
-    👤 Users
-  </a>
-  <a routerLink="/departments" routerLinkActive="active"
-    style="color:rgba(255,255,255,0.85); text-decoration:none; font-size:15px">
-    🏢 Departments
-  </a>
+<nav class="navbar">
+  <div class="navbar-brand">
+    <span class="brand-icon">🏢</span>
+    <span class="brand-text">HR System</span>
+  </div>
+  <div class="navbar-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link">
+      <span class="nav-icon">👤</span>
+      <span class="nav-text">จัดการผู้ใช้</span>
+    </a>
+    <a routerLink="/departments" routerLinkActive="active" class="nav-link">
+      <span class="nav-icon">🏬</span>
+      <span class="nav-text">แผนก</span>
+    </a>
+  </div>
 </nav>
 
 <style>
-  a.active { color:white !important; border-bottom: 2px solid white; padding-bottom:2px; }
+  .navbar {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    box-shadow: 0 4px 12px rgba(0, 77, 40, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .brand-icon {
+    font-size: 28px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  .brand-text {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    position: relative;
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+  }
+  
+  .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+  }
+  
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  
+  .nav-icon {
+    font-size: 16px;
+  }
+  
+  .nav-text {
+    font-family: var(--font-body);
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  
+  @media (max-width: 640px) {
+    .navbar {
+      padding: 0 16px;
+    }
+    
+    .brand-text {
+      font-size: 18px;
+    }
+    
+    .nav-text {
+      display: none;
+    }
+    
+    .nav-link {
+      padding: 10px 14px;
+    }
+  }
 </style>

@@ -1,48 +1,104 @@
-<div style="padding:16px; max-width:600px">
-  <a routerLink="/" style="color:#1976d2; text-decoration:none">← กลับ</a>
+<div class="page-container">
+  <a routerLink="/" class="back-link">← กลับหน้ารายชื่อ</a>
 
-  <div *ngIf="loading" style="text-align:center; padding:40px">กำลังโหลด...</div>
-
-  <div *ngIf="user" style="margin-top:16px">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
-      <h2 style="margin:0">{{ user.first_name }} {{ user.last_name }}</h2>
-      <a [routerLink]="['/edit', user.id]"
-        style="padding:8px 16px; background:#1976d2; color:white; text-decoration:none; border-radius:4px">
-        ✏️ แก้ไข
-      </a>
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="state-container">
+      <div class="loading-spinner"></div>
+      <p class="state-text">กำลังโหลดข้อมูล...</p>
     </div>
+  }
 
-    <div style="background:white; border:1px solid #ddd; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:10px">
-      <div style="display:flex; gap:8px">
-        <span style="color:#666; width:120px">เพศ</span>
-        <span>{{ user.gender === 'male' ? 'ชาย' : user.gender === 'female' ? 'หญิง' : 'ไม่ระบุ' }}</span>
+  <!-- Error State -->
+  @if (!loading && error) {
+    <div class="state-container error-state">
+      <div class="state-icon">❌</div>
+      <h3>เกิดข้อผิดพลาด</h3>
+      <p class="state-text">{{ error }}</p>
+      <button (click)="retry()" class="btn-retry">
+        <span>🔄</span> ลองใหม่อีกครั้ง
+      </button>
+    </div>
+  }
+
+  <!-- User Detail -->
+  @if (!loading && !error && user) {
+    <div class="user-card">
+      <div class="card-header">
+        <div class="user-avatar">
+          {{ user.gender === 'male' ? '👨' : user.gender === 'female' ? '👩' : '🧑' }}
+        </div>
+        <div class="user-title">
+          <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+          <span class="badge" [class]="'badge-' + user.gender">
+            {{ user.gender === 'male' ? 'ชาย' : user.gender === 'female' ? 'หญิง' : 'ไม่ระบุ' }}
+          </span>
+        </div>
+        <div class="header-actions">
+          <a [routerLink]="['/edit', user.id]" class="btn-edit">
+            ✏️ แก้ไข
+          </a>
+          <button (click)="deleteUser()" [disabled]="deleting" class="btn-delete">
+            @if (deleting) {
+              <span class="mini-spinner"></span> กำลังลบ...
+            } @else {
+              🗑️ ลบ
+            }
+          </button>
+        </div>
       </div>
-      <div style="display:flex; gap:8px">
-        <span style="color:#666; width:120px">อายุ</span>
-        <span>{{ user.age }} ปี</span>
-      </div>
-      <div style="display:flex; gap:8px">
-        <span style="color:#666; width:120px">อีเมล</span>
-        <span>{{ user.email }}</span>
-      </div>
-      <div style="display:flex; gap:8px">
-        <span style="color:#666; width:120px">เบอร์โทร</span>
-        <span>{{ user.phone || '–' }}</span>
-      </div>
-      <div style="display:flex; gap:8px">
-        <span style="color:#666; width:120px">แผนก</span>
-        <a *ngIf="user.department" [routerLink]="['/departments', user.department.id]"
-          style="color:#1976d2; text-decoration:none">{{ user.department.name }}</a>
-        <span *ngIf="!user.department" style="color:#999">ไม่มีแผนก</span>
+
+      <div class="card-body">
+        <div class="info-section">
+          <h3>📋 ข้อมูลทั่วไป</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">อายุ</span>
+              <span class="value">{{ user.age }} ปี</span>
+            </div>
+            <div class="info-item">
+              <span class="label">อีเมล</span>
+              <span class="value">{{ user.email }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">เบอร์โทร</span>
+              <span class="value">{{ user.phone || '–' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">แผนก</span>
+              @if (user.department) {
+                <a [routerLink]="['/departments', user.department.id]" class="dept-link">
+                  🏢 {{ user.department.name }}
+                </a>
+              } @else {
+                <span class="no-data">ไม่มีแผนก</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3>📍 ที่อยู่</h3>
+          @if (user.address) {
+            <div class="address-box">
+              <div class="address-line">
+                {{ user.address.house_no }}
+                @if (user.address.street) {
+                  <span> ถนน{{ user.address.street }}</span>
+                }
+              </div>
+              <div class="address-line">
+                {{ user.address.district }}, {{ user.address.province }} {{ user.address.postal_code }}
+              </div>
+            </div>
+          } @else {
+            <div class="no-address">
+              <span>📭</span>
+              <span>ไม่มีที่อยู่</span>
+            </div>
+          }
+        </div>
       </div>
     </div>
-
-    <div *ngIf="user.address" style="margin-top:16px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; padding:16px">
-      <strong style="display:block; margin-bottom:10px">📍 ที่อยู่</strong>
-      <div>{{ user.address.house_no }}<span *ngIf="user.address.street"> ถ.{{ user.address.street }}</span></div>
-      <div>{{ user.address.district }}, {{ user.address.province }} {{ user.address.postal_code }}</div>
-    </div>
-
-    <div *ngIf="!user.address" style="margin-top:16px; color:#999">ไม่มีที่อยู่</div>
-  </div>
+  }
 </div>

@@ -1,0 +1,173 @@
+.page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #1f2937;
+}
+
+.total-badge {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* States */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #16a34a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.state-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.state-container h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #374151;
+}
+
+.state-text {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+.error-state {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.error-state h3 {
+  color: #dc2626;
+}
+
+.btn-retry {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-retry:hover {
+  background: #b91c1c;
+}
+
+.empty-state {
+  background: #f9fafb;
+}
+
+/* Department Cards Grid */
+.departments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.dept-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.dept-card:hover {
+  border-color: #16a34a;
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.15);
+  transform: translateY(-2px);
+}
+
+.dept-icon {
+  font-size: 40px;
+  width: 60px;
+  height: 60px;
+  background: #dcfce7;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dept-info {
+  flex: 1;
+}
+
+.dept-name {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-count-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dept-arrow {
+  font-size: 24px;
+  color: #16a34a;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.dept-card:hover .dept-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}

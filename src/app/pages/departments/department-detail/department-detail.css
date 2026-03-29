@@ -1,0 +1,234 @@
+.page-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #16a34a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+/* States */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #16a34a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.state-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.state-container h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #374151;
+}
+
+.state-text {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+.error-state {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.error-state h3 {
+  color: #dc2626;
+}
+
+.btn-retry {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-retry:hover {
+  background: #b91c1c;
+}
+
+/* Department Card */
+.dept-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+}
+
+.dept-icon {
+  font-size: 48px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dept-title h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.user-count-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Card Body */
+.card-body {
+  padding: 24px;
+}
+
+.card-body h3 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: #374151;
+}
+
+.empty-members {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-style: italic;
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+/* Table */
+.members-table {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.members-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.members-table th {
+  background: #f9fafb;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.members-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.members-table tr:hover {
+  background: #f9fafb;
+}
+
+.members-table tr:last-child td {
+  border-bottom: none;
+}
+
+.user-link {
+  color: #16a34a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.user-link:hover {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-male {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge-female {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.badge-unspecified {
+  background: #f3f4f6;
+  color: #6b7280;
+}

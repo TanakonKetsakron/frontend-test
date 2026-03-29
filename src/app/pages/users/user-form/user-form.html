@@ -1,116 +1,177 @@
-<div style="padding:16px; max-width:600px">
-  <h2>{{ id ? 'แก้ไข User' : 'เพิ่ม User' }}</h2>
-
-  <div style="display:flex; flex-direction:column; gap:10px">
-
-    <div style="display:flex; gap:10px">
-      <div style="flex:1">
-        <label>ชื่อ *</label><br>
-        <input [(ngModel)]="form.first_name" placeholder="ชื่อ"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-      </div>
-      <div style="flex:1">
-        <label>นามสกุล *</label><br>
-        <input [(ngModel)]="form.last_name" placeholder="นามสกุล"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-      </div>
-    </div>
-
-    <div style="display:flex; gap:10px">
-      <div style="flex:1">
-        <label>อายุ *</label><br>
-        <input [(ngModel)]="form.age" type="number" placeholder="อายุ"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-      </div>
-      <div style="flex:1">
-        <label>เพศ *</label><br>
-        <select [(ngModel)]="form.gender"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-          <option value="">เลือกเพศ</option>
-          <option value="male">ชาย</option>
-          <option value="female">หญิง</option>
-          <option value="unspecified">ไม่ระบุ</option>
-        </select>
-      </div>
-    </div>
-
-    <div>
-      <label>อีเมล *</label><br>
-      <input [(ngModel)]="form.email" placeholder="อีเมล" type="email"
-        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-    </div>
-
-    <div>
-      <label>เบอร์โทร</label><br>
-      <input [(ngModel)]="form.phone" placeholder="เบอร์โทร"
-        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-    </div>
-
-    <div>
-      <label>แผนก</label><br>
-      <select [(ngModel)]="form.department_id"
-        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-        <option value="">ไม่มีแผนก</option>
-        <option *ngFor="let d of departments" [value]="d.id">{{ d.name }}</option>
-      </select>
-    </div>
-
-    <!-- Address Toggle -->
-    <div style="margin-top:8px">
-      <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
-        <input type="checkbox" [checked]="showAddress" (change)="toggleAddress()">
-        <strong>มีที่อยู่</strong>
-      </label>
-    </div>
-
-    <div *ngIf="showAddress" style="background:#f9f9f9; padding:12px; border-radius:8px; display:flex; flex-direction:column; gap:10px">
-      <div>
-        <label>บ้านเลขที่ *</label><br>
-        <input [(ngModel)]="form.address.house_no" placeholder="บ้านเลขที่"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-      </div>
-      <div>
-        <label>ถนน</label><br>
-        <input [(ngModel)]="form.address.street" placeholder="ถนน (ไม่บังคับ)"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-      </div>
-      <div style="display:flex; gap:10px">
-        <div style="flex:1">
-          <label>อำเภอ/เขต *</label><br>
-          <input [(ngModel)]="form.address.district" placeholder="อำเภอ/เขต"
-            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-        </div>
-        <div style="flex:1">
-          <label>จังหวัด *</label><br>
-          <input [(ngModel)]="form.address.province" placeholder="จังหวัด"
-            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-        </div>
-      </div>
-      <div>
-        <label>รหัสไปรษณีย์ *</label><br>
-        <input [(ngModel)]="form.address.postal_code" placeholder="รหัสไปรษณีย์ 5 หลัก" maxlength="5"
-          style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box">
-        <small *ngIf="form.address?.postal_code && !/^\d{5}$/.test(form.address.postal_code)"
-          style="color:red">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</small>
-      </div>
-    </div>
-
-    <!-- Error -->
-    <div *ngIf="errorMsg" style="color:red; background:#ffebee; padding:8px; border-radius:4px">
-      {{ errorMsg }}
-    </div>
-
-    <!-- Buttons -->
-    <div style="display:flex; gap:8px; margin-top:8px">
-      <button (click)="submit()" [disabled]="loading"
-        style="padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:4px; cursor:pointer">
-        {{ loading ? 'กำลังบันทึก...' : 'บันทึก' }}
-      </button>
-      <button routerLink="/"
-        style="padding:10px 24px; background:#eee; border:none; border-radius:4px; cursor:pointer">
-        ยกเลิก
-      </button>
-    </div>
-
+<div class="form-container">
+  <div class="form-header">
+    <a routerLink="/" class="back-link">← กลับ</a>
+    <h2>{{ id ? 'แก้ไขผู้ใช้' : 'เพิ่มผู้ใช้ใหม่' }}</h2>
   </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="submit()" class="user-form">
+    <!-- Basic Info -->
+    <div class="form-section">
+      <h3 class="section-title">ข้อมูลทั่วไป</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">ชื่อ <span class="required">*</span></label>
+          <input type="text" formControlName="first_name" class="form-input" 
+                 [class.error]="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched"
+                 (input)="onNameInput($event, 'first_name')"
+                 placeholder="กรอกชื่อ">
+          <span class="hint-text">ใส่ได้เฉพาะตัวอักษรภาษาไทยหรืออังกฤษ</span>
+          @if (getErrorMessage('first_name')) {
+            <span class="error-text">{{ getErrorMessage('first_name') }}</span>
+          }
+        </div>
+        <div class="form-group">
+          <label class="form-label">นามสกุล <span class="required">*</span></label>
+          <input type="text" formControlName="last_name" class="form-input"
+                 [class.error]="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched"
+                 (input)="onNameInput($event, 'last_name')"
+                 placeholder="กรอกนามสกุล">
+          <span class="hint-text">ใส่ได้เฉพาะตัวอักษรภาษาไทยหรืออังกฤษ</span>
+          @if (getErrorMessage('last_name')) {
+            <span class="error-text">{{ getErrorMessage('last_name') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">อายุ <span class="required">*</span></label>
+          <input type="text" formControlName="age" class="form-input" 
+                 [class.error]="userForm.get('age')?.invalid && userForm.get('age')?.touched"
+                 (input)="onNumberInput($event, 'age')"
+                 maxlength="3"
+                 placeholder="1-120">
+          <span class="hint-text">ใส่ได้เฉพาะตัวเลข 1-120</span>
+          @if (getErrorMessage('age')) {
+            <span class="error-text">{{ getErrorMessage('age') }}</span>
+          }
+        </div>
+        <div class="form-group">
+          <label class="form-label">เพศ <span class="required">*</span></label>
+          <select formControlName="gender" class="form-input"
+                  [class.error]="userForm.get('gender')?.invalid && userForm.get('gender')?.touched">
+            <option value="">-- เลือกเพศ --</option>
+            <option value="male">ชาย</option>
+            <option value="female">หญิง</option>
+            <option value="unspecified">ไม่ระบุ</option>
+          </select>
+          <span class="hint-text">เลือกเพศจากรายการ</span>
+          @if (getErrorMessage('gender')) {
+            <span class="error-text">{{ getErrorMessage('gender') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">อีเมล <span class="required">*</span></label>
+        <input type="email" formControlName="email" class="form-input"
+               [class.error]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+               placeholder="example@email.com">
+        <span class="hint-text">รูปแบบ: example&#64;email.com</span>
+        @if (getErrorMessage('email')) {
+          <span class="error-text">{{ getErrorMessage('email') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">เบอร์โทรศัพท์ <span class="optional">(ไม่บังคับ)</span></label>
+        <input type="tel" formControlName="phone" class="form-input"
+               [class.error]="userForm.get('phone')?.invalid && userForm.get('phone')?.touched"
+               (input)="onPhoneInput($event)"
+               maxlength="12"
+               placeholder="092-345-6789">
+        <span class="hint-text">ใส่ได้ 9-10 หลัก (รองรับ - ตรงกลาง เช่น 092-345-6789)</span>
+        @if (getErrorMessage('phone')) {
+          <span class="error-text">{{ getErrorMessage('phone') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">แผนก <span class="optional">(ไม่บังคับ)</span></label>
+        <select formControlName="department_id" class="form-input">
+          <option value="">-- ไม่มีแผนก --</option>
+          @for (dept of departments; track dept.id) {
+            <option [value]="dept.id">{{ dept.name }}</option>
+          }
+        </select>
+        <span class="hint-text">เลือกแผนกจากรายการ</span>
+      </div>
+    </div>
+
+    <!-- Address Section -->
+    <div class="form-section">
+      <div class="address-toggle">
+        <label class="toggle-label">
+          <input type="checkbox" [checked]="showAddress" (change)="toggleAddress()">
+          <span class="toggle-text">มีที่อยู่</span>
+        </label>
+      </div>
+
+      @if (showAddress) {
+        <div class="address-form" formGroupName="address">
+          <h3 class="section-title">📍 ที่อยู่</h3>
+          
+          <div class="form-group">
+            <label class="form-label">บ้านเลขที่ <span class="required">*</span></label>
+            <input type="text" formControlName="house_no" class="form-input"
+                   [class.error]="userForm.get('address.house_no')?.invalid && userForm.get('address.house_no')?.touched"
+                   placeholder="เช่น 123/45">
+            <span class="hint-text">กรอกบ้านเลขที่</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ถนน <span class="optional">(ไม่บังคับ)</span></label>
+            <input type="text" formControlName="street" class="form-input"
+                   placeholder="ชื่อถนน">
+            <span class="hint-text">กรอกชื่อถนน (เว้นว่างได้)</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">อำเภอ/เขต <span class="required">*</span></label>
+              <input type="text" formControlName="district" class="form-input"
+                     [class.error]="userForm.get('address.district')?.invalid && userForm.get('address.district')?.touched"
+                     placeholder="ชื่ออำเภอ/เขต">
+            </div>
+            <div class="form-group">
+              <label class="form-label">จังหวัด <span class="required">*</span></label>
+              <input type="text" formControlName="province" class="form-input"
+                     [class.error]="userForm.get('address.province')?.invalid && userForm.get('address.province')?.touched"
+                     placeholder="ชื่อจังหวัด">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">รหัสไปรษณีย์ <span class="required">*</span></label>
+            <input type="text" formControlName="postal_code" class="form-input" maxlength="5"
+                   [class.error]="userForm.get('address.postal_code')?.invalid && userForm.get('address.postal_code')?.touched"
+                   (input)="onNumberInput($event, 'address.postal_code')"
+                   placeholder="เช่น 10110">
+            <span class="hint-text">ใส่ได้เฉพาะตัวเลข 5 หลัก</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMsg) {
+      <div class="error-box">
+        <strong>⚠️ กรุณาแก้ไขข้อผิดพลาด:</strong>
+        <pre>{{ errorMsg }}</pre>
+      </div>
+    }
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        @if (loading) {
+          <span>กำลังบันทึก...</span>
+        } @else {
+          <span>{{ id ? 'บันทึกการแก้ไข' : 'เพิ่มผู้ใช้' }}</span>
+        }
+      </button>
+      <a routerLink="/" class="btn btn-secondary">ยกเลิก</a>
+    </div>
+  </form>
 </div>
