@@ -30,6 +30,26 @@ export class UserFormComponent implements OnInit {
   showAddress = false;
   errorMsg = '';
 
+  // รายชื่อ 77 จังหวัดของไทย
+  provinces: string[] = [
+    'กรุงเทพมหานคร', 'กระบี่', 'กาญจนบุรี', 'กาฬสินธุ์', 'กำแพงเพชร',
+    'ขอนแก่น', 'จันทบุรี', 'ฉะเชิงเทรา', 'ชลบุรี', 'ชัยนาท',
+    'ชัยภูมิ', 'ชุมพร', 'เชียงราย', 'เชียงใหม่', 'ตรัง',
+    'ตราด', 'ตาก', 'นครนายก', 'นครปฐม', 'นครพนม',
+    'นครราชสีมา', 'นครศรีธรรมราช', 'นครสวรรค์', 'นนทบุรี', 'นราธิวาส',
+    'น่าน', 'บึงกาฬ', 'บุรีรัมย์', 'ปทุมธานี', 'ประจวบคีรีขันธ์',
+    'ปราจีนบุรี', 'ปัตตานี', 'พระนครศรีอยุธยา', 'พะเยา', 'พังงา',
+    'พัทลุง', 'พิจิตร', 'พิษณุโลก', 'เพชรบุรี', 'เพชรบูรณ์',
+    'แพร่', 'ภูเก็ต', 'มหาสารคาม', 'มุกดาหาร', 'แม่ฮ่องสอน',
+    'ยโสธร', 'ยะลา', 'ร้อยเอ็ด', 'ระนอง', 'ระยอง',
+    'ราชบุรี', 'ลพบุรี', 'ลำปาง', 'ลำพูน', 'เลย',
+    'ศรีสะเกษ', 'สกลนคร', 'สงขลา', 'สตูล', 'สมุทรปราการ',
+    'สมุทรสงคราม', 'สมุทรสาคร', 'สระแก้ว', 'สระบุรี', 'สิงห์บุรี',
+    'สุโขทัย', 'สุพรรณบุรี', 'สุราษฎร์ธานี', 'สุรินทร์', 'หนองคาย',
+    'หนองบัวลำภู', 'อ่างทอง', 'อำนาจเจริญ', 'อุดรธานี', 'อุตรดิตถ์',
+    'อุทัยธานี', 'อุบลราชธานี'
+  ];
+
   // Custom validator: ชื่อต้องเป็นตัวอักษรไทย/อังกฤษเท่านั้น
   private nameValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
@@ -42,17 +62,14 @@ export class UserFormComponent implements OnInit {
     if (!control.value) return null;
     const phone = control.value;
     
-    // ไม่อนุญาตให้ขึ้นต้นหรือลงท้ายด้วย dash
     if (/^-/.test(phone) || /-$/.test(phone)) {
       return { invalidPhone: true, message: 'เบอร์โทรไม่สามารถขึ้นต้นหรือลงท้ายด้วยเครื่องหมาย - ได้' };
     }
     
-    // ตรวจสอบว่าเป็นตัวเลขและ dash เท่านั้น
     if (!/^[0-9-]+$/.test(phone)) {
       return { invalidPhone: true, message: 'เบอร์โทรต้องเป็นตัวเลขเท่านั้น' };
     }
     
-    // นับจำนวนตัวเลข (ไม่รวม dash) ต้อง 9-10 หลัก
     const digitsOnly = phone.replace(/-/g, '');
     if (digitsOnly.length < 9 || digitsOnly.length > 10) {
       return { invalidPhone: true, message: 'เบอร์โทรต้องมี 9-10 หลัก' };
@@ -157,6 +174,13 @@ export class UserFormComponent implements OnInit {
     addressGroup.get('postal_code')?.updateValueAndValidity();
   }
 
+  // บ้านเลขที่ — รับเฉพาะตัวเลขและ /
+  onHouseNoInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9/]/g, '');
+    this.userForm.get('address.house_no')?.setValue(input.value);
+  }
+
   // กรองให้กรอกได้เฉพาะตัวเลข
   onNumberInput(event: Event, fieldName: string): void {
     const input = event.target as HTMLInputElement;
@@ -167,7 +191,6 @@ export class UserFormComponent implements OnInit {
   // กรองให้กรอกได้เฉพาะตัวเลขและ dash (สำหรับเบอร์โทร)
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    // อนุญาตเฉพาะตัวเลขและ dash
     input.value = input.value.replace(/[^0-9-]/g, '');
     this.userForm.get('phone')?.setValue(input.value);
   }
@@ -216,7 +239,7 @@ export class UserFormComponent implements OnInit {
       const addr = this.userForm.get('address') as FormGroup;
       if (addr.get('house_no')?.errors?.['required']) errors.push('กรุณากรอกบ้านเลขที่');
       if (addr.get('district')?.errors?.['required']) errors.push('กรุณากรอกอำเภอ/เขต');
-      if (addr.get('province')?.errors?.['required']) errors.push('กรุณากรอกจังหวัด');
+      if (addr.get('province')?.errors?.['required']) errors.push('กรุณาเลือกจังหวัด');
       if (addr.get('postal_code')?.errors) errors.push('รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก');
     }
 
@@ -270,7 +293,6 @@ export class UserFormComponent implements OnInit {
         this.loading = false;
         const rawMsg = err.error?.message || '';
         
-        // ตรวจจับ error อีเมลซ้ำและแสดงข้อความที่ชัดเจน
         if (rawMsg.toLowerCase().includes('email') && rawMsg.toLowerCase().includes('exist')) {
           const email = this.userForm.get('email')?.value || '';
           this.errorMsg = `อีเมล "${email}" มีอยู่ในระบบแล้ว กรุณาใช้อีเมลอื่น`;

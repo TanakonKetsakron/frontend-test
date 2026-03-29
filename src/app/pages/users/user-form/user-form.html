@@ -112,12 +112,17 @@
         <div class="address-form" formGroupName="address">
           <h3 class="section-title">📍 ที่อยู่</h3>
           
+          <!-- บ้านเลขที่ — รับเฉพาะตัวเลขและ / -->
           <div class="form-group">
             <label class="form-label">บ้านเลขที่ <span class="required">*</span></label>
             <input type="text" formControlName="house_no" class="form-input"
                    [class.error]="userForm.get('address.house_no')?.invalid && userForm.get('address.house_no')?.touched"
-                   placeholder="เช่น 123/45">
-            <span class="hint-text">กรอกบ้านเลขที่</span>
+                   (input)="onHouseNoInput($event)"
+                   placeholder="เช่น 123 หรือ 123/45">
+            <span class="hint-text">กรอกได้เฉพาะตัวเลขและ /</span>
+            @if (userForm.get('address.house_no')?.invalid && userForm.get('address.house_no')?.touched) {
+              <span class="error-text">กรุณากรอกบ้านเลขที่</span>
+            }
           </div>
 
           <div class="form-group">
@@ -133,12 +138,24 @@
               <input type="text" formControlName="district" class="form-input"
                      [class.error]="userForm.get('address.district')?.invalid && userForm.get('address.district')?.touched"
                      placeholder="ชื่ออำเภอ/เขต">
+              @if (userForm.get('address.district')?.invalid && userForm.get('address.district')?.touched) {
+                <span class="error-text">กรุณากรอกอำเภอ/เขต</span>
+              }
             </div>
+
+            <!-- จังหวัด — Dropdown -->
             <div class="form-group">
               <label class="form-label">จังหวัด <span class="required">*</span></label>
-              <input type="text" formControlName="province" class="form-input"
-                     [class.error]="userForm.get('address.province')?.invalid && userForm.get('address.province')?.touched"
-                     placeholder="ชื่อจังหวัด">
+              <select formControlName="province" class="form-input"
+                      [class.error]="userForm.get('address.province')?.invalid && userForm.get('address.province')?.touched">
+                <option value="">-- เลือกจังหวัด --</option>
+                @for (p of provinces; track p) {
+                  <option [value]="p">{{ p }}</option>
+                }
+              </select>
+              @if (userForm.get('address.province')?.invalid && userForm.get('address.province')?.touched) {
+                <span class="error-text">กรุณาเลือกจังหวัด</span>
+              }
             </div>
           </div>
 
