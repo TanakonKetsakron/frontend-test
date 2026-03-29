@@ -1,78 +1,172 @@
-# Frontend Test — Angular
+# HR Management System — Angular Frontend
 
-Frontend สำหรับโจทย์ Frontend Developer Assessment  
-พัฒนาด้วย Angular 21 (Standalone Components)
+ระบบจัดการทรัพยากรบุคคล (HR) พัฒนาด้วย Angular 21 (Standalone Components)
 
-## Features
-- แสดงรายการ Users พร้อม Department และ Address
-- ค้นหา / กรองเพศ / กรองแผนก / เรียงลำดับ
-- เพิ่ม / แก้ไข / ลบ User พร้อม Address
-- หน้า Departments แสดง user_count และรายชื่อสมาชิก
+## 🚀 Features
 
-## Requirements
-- Backend รันอยู่ที่ http://localhost:4000
+### User Management
+- ✅ แสดงรายการ Users พร้อม Department และ Address
+- ✅ ค้นหา (Search) พร้อม Debounce 300ms
+- ✅ กรองตามเพศ (male/female/unspecified)
+- ✅ กรองตามแผนก (Department)
+- ✅ เรียงลำดับ (Sort) ตาม field ต่างๆ
+- ✅ Pagination
+- ✅ เพิ่ม / แก้ไข / ลบ User พร้อม Address
+- ✅ Form Validation ครบถ้วน
+
+### Department Management
+- ✅ แสดงรายการ Departments พร้อม user_count
+- ✅ ดูรายละเอียด Department พร้อมรายชื่อสมาชิก
+
+### Authentication
+- ✅ Login/Logout ผ่าน Backend API
+- ✅ Route Protection (Auth Guard)
+- ✅ Token-based Authentication
+
+### UX/UI
+- ✅ Theme เขียว-ขาว (#16a34a)
+- ✅ Loading States
+- ✅ Error States พร้อม Retry
+- ✅ Empty States
+- ✅ Toast Notifications
+- ✅ Responsive Design
+
+## 📋 Requirements
+
 - Node.js 20+
+- Backend API รันอยู่ที่ `http://localhost:4000`
 
-## Development server
+## 🛠️ Tech Stack
 
-To start a local development server, run:
-...
-# FrontendTest
+- **Framework:** Angular 21 (Standalone Components)
+- **Styling:** TailwindCSS 4
+- **State:** Signals
+- **Forms:** ReactiveFormsModule
+- **HTTP:** HttpClient with typed responses
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
-
-## Development server
-
-To start a local development server, run:
+## 📦 Installation
 
 ```bash
+# Clone repository
+git clone <repository-url>
+cd frontend-test
+
+# Install dependencies
+npm install
+
+# Start development server
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🔧 Configuration
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+สร้างไฟล์ `.env` จาก `.env.example`:
 
 ```bash
-ng generate component component-name
+cp .env.example .env
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+ตั้งค่า API URL ใน `src/environments/environment.ts`:
 
-```bash
-ng generate --help
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:4000'
+};
 ```
 
-## Building
-
-To build the project run:
+## 🚀 Development
 
 ```bash
+# Start dev server
+ng serve
+
+# Build for production
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
+# Run tests
 ng test
 ```
 
-## Running end-to-end tests
+เปิด browser ไปที่ `http://localhost:4200/`
 
-For end-to-end (e2e) testing, run:
+## 📁 Project Structure
 
-```bash
-ng e2e
+```
+src/
+├── environments/
+│   ├── environment.ts
+│   └── environment.prod.ts
+├── app/
+│   ├── app.config.ts
+│   ├── app.routes.ts
+│   ├── app.component.ts
+│   ├── models/
+│   │   ├── user.model.ts
+│   │   └── department.model.ts
+│   ├── services/
+│   │   ├── user.service.ts
+│   │   ├── department.service.ts
+│   │   ├── auth.service.ts
+│   │   ├── auth.guard.ts
+│   │   └── toast.service.ts
+│   ├── navbar/
+│   └── pages/
+│       ├── auth/
+│       │   └── login.component.ts
+│       ├── users/
+│       │   ├── user-list/
+│       │   ├── user-detail/
+│       │   └── user-form/
+│       └── departments/
+│           ├── department-list/
+│           └── department-detail/
+└── styles.css
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🔐 API Endpoints
 
-## Additional Resources
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /auth/login | Login |
+| GET | /users | List users with filters |
+| GET | /users/:id | Get user detail |
+| POST | /users | Create user |
+| PUT | /users/:id | Update user |
+| DELETE | /users/:id | Delete user |
+| GET | /departments | List departments |
+| GET | /departments/:id | Get department detail |
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📝 Query Parameters (GET /users)
+
+| Param | Type | Description |
+|-------|------|-------------|
+| page | number | Page number |
+| limit | number | Items per page |
+| search | string | Search by name/email |
+| gender | string | Filter by gender |
+| department_id | number | Filter by department |
+| sort | string | Sort field |
+| order | asc/desc | Sort order |
+
+## ✅ Validation Rules
+
+### User Form
+- **first_name:** Required, Thai/English letters only
+- **last_name:** Required, Thai/English letters only
+- **age:** Required, 1-120
+- **gender:** Required (male/female/unspecified)
+- **email:** Required, valid email format
+- **phone:** Optional, 9-10 digits
+- **department_id:** Optional
+
+### Address Form (Optional)
+- **house_no:** Required when address enabled
+- **street:** Optional
+- **district:** Required when address enabled
+- **province:** Required when address enabled
+- **postal_code:** Required, 5 digits
+
+## 📄 License
+
+MIT

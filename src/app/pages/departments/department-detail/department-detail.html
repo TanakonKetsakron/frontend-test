@@ -34,15 +34,15 @@
 
       <div class="card-body">
         <h3>📋 รายชื่อสมาชิก</h3>
-    .  
-        @if (department.users?.length === 0) {
+    
+        @if (department.users.length === 0) {
           <div class="empty-members">
             <span>📭</span>
             <span>ไม่มีสมาชิกในแผนกนี้</span>
           </div>
         }
 
-        @if (department.users?.length > 0) {
+        @if (department.users.length > 0) {
           <div class="members-table">
             <table>
               <thead>

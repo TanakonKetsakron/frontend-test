@@ -5,6 +5,8 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { DepartmentService } from '../../../services/department.service';
 import { ToastService } from '../../../services/toast.service';
+import { Department } from '../../../models/user.model';
+import { CreateUserPayload, UpdateUserPayload } from '../../../models/user.model';
 
 @Component({
   selector: 'app-user-form',
@@ -21,7 +23,7 @@ export class UserFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  departments: any[] = [];
+  departments: Department[] = [];
   id: string | null = null;
   loading = false;
   loadingData = false;

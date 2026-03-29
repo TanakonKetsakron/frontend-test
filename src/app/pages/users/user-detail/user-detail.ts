@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { ToastService } from '../../../services/toast.service';
+import { User } from '../../../models/user.model';
 
 @Component({
   selector: 'app-user-detail',
@@ -17,7 +18,7 @@ export class UserDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  user: any = null;
+  user: User | null = null;
   loading = false;
   error = '';
   deleting = false;
@@ -32,8 +33,8 @@ export class UserDetailComponent implements OnInit {
     this.error = '';
     
     this.userService.getById(Number(id)).subscribe({
-      next: (res: any) => {
-        this.user = res.data ?? res;
+      next: (res) => {
+        this.user = res.data;
         this.loading = false;
       },
       error: (err) => {
@@ -50,7 +51,7 @@ export class UserDetailComponent implements OnInit {
     const name = `${this.user.first_name} ${this.user.last_name}`;
     if (confirm(`ต้องการลบ "${name}" ใช่หรือไม่?\n\nการลบจะไม่สามารถกู้คืนได้`)) {
       this.deleting = true;
-      this.userService.delete(this.user.id).subscribe({
+      this.userService.remove(this.user.id).subscribe({
         next: () => {
           this.toastService.success(`✅ ลบ "${name}" เรียบร้อยแล้ว`);
           this.router.navigate(['/']);
@@ -60,6 +61,14 @@ export class UserDetailComponent implements OnInit {
           this.toastService.error(err.error?.message || 'ไม่สามารถลบข้อมูลได้');
         }
       });
+    }
+  }
+
+  getGenderLabel(gender: string): string {
+    switch (gender) {
+      case 'male': return '👨 ชาย';
+      case 'female': return '👩 หญิง';
+      default: return '⚪ ไม่ระบุ';
     }
   }
 

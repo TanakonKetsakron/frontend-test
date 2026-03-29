@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { DepartmentService } from '../../../services/department.service';
 import { ToastService } from '../../../services/toast.service';
+import { DepartmentWithUsers } from '../../../models/department.model';
 
 @Component({
   selector: 'app-department-detail',
@@ -16,7 +17,7 @@ export class DepartmentDetailComponent implements OnInit {
   private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
 
-  department: any = null;
+  department: DepartmentWithUsers | null = null;
   loading = false;
   error = '';
 
@@ -30,7 +31,7 @@ export class DepartmentDetailComponent implements OnInit {
     this.error = '';
     
     this.departmentService.getById(Number(id)).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         this.department = res.data;
         this.loading = false;
       },
@@ -40,6 +41,14 @@ export class DepartmentDetailComponent implements OnInit {
         this.toastService.error(this.error);
       }
     });
+  }
+
+  getGenderLabel(gender: string): string {
+    switch (gender) {
+      case 'male': return '👨 ชาย';
+      case 'female': return '👩 หญิง';
+      default: return '⚪ ไม่ระบุ';
+    }
   }
 
   retry(): void {

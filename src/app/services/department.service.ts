@@ -1,21 +1,31 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { 
+  Department, 
+  DepartmentListResponse, 
+  DepartmentDetailResponse 
+} from '../models/department.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepartmentService {
-  private api = 'http://localhost:4000';
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
-
-  // 🔥 GET ALL DEPARTMENTS
-  getAll() {
-    return this.http.get<any>(`${this.api}/departments`);
+  /**
+   * ดึงรายการ Departments ทั้งหมด พร้อม user_count
+   */
+  getAll(): Observable<DepartmentListResponse> {
+    return this.http.get<DepartmentListResponse>(`${this.apiUrl}/departments`);
   }
 
-  // 🔥 GET BY ID
-  getById(id: number) {
-    return this.http.get(`${this.api}/departments/${id}`);
+  /**
+   * ดึงข้อมูล Department ตาม ID พร้อมรายชื่อ users
+   */
+  getById(id: number): Observable<DepartmentDetailResponse> {
+    return this.http.get<DepartmentDetailResponse>(`${this.apiUrl}/departments/${id}`);
   }
 }

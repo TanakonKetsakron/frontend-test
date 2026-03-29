@@ -1,37 +1,65 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { User } from '../models/user';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { 
+  User, 
+  UserFilters, 
+  UserListResponse, 
+  UserResponse, 
+  CreateUserPayload, 
+  UpdateUserPayload 
+} from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private api = 'http://localhost:4000';
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  /**
+   * ดึงรายการ Users พร้อม filters และ pagination
+   */
+  getAll(filters: UserFilters = {}): Observable<UserListResponse> {
+    let params = new HttpParams();
+    
+    if (filters.page) params = params.set('page', filters.page.toString());
+    if (filters.limit) params = params.set('limit', filters.limit.toString());
+    if (filters.search) params = params.set('search', filters.search);
+    if (filters.gender) params = params.set('gender', filters.gender);
+    if (filters.department_id) params = params.set('department_id', filters.department_id.toString());
+    if (filters.sort) params = params.set('sort', filters.sort);
+    if (filters.order) params = params.set('order', filters.order);
 
-  // 🔥 GET ALL (มี filter/search)
-  getAll(params: any) {
-  return this.http.get<any>(`${this.api}/users`, { params });
-}
-
-  // 🔥 GET BY ID
-  getById(id: number) {
-    return this.http.get<User>(`${this.api}/users/${id}`);
+    return this.http.get<UserListResponse>(`${this.apiUrl}/users`, { params });
   }
 
-  // 🔥 CREATE USER
-  create(data: any) {
-    return this.http.post(`${this.api}/users`, data);
+  /**
+   * ดึงข้อมูล User ตาม ID
+   */
+  getById(id: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${this.apiUrl}/users/${id}`);
   }
 
-  // 🔥 UPDATE USER
-  update(id: number, data: any) {
-    return this.http.put(`${this.api}/users/${id}`, data);
+  /**
+   * สร้าง User ใหม่
+   */
+  create(data: CreateUserPayload): Observable<UserResponse> {
+    return this.http.post<UserResponse>(`${this.apiUrl}/users`, data);
   }
 
-  // 🔥 DELETE USER
-  delete(id: number) {
-    return this.http.delete(`${this.api}/users/${id}`);
+  /**
+   * อัปเดต User
+   */
+  update(id: number, data: UpdateUserPayload): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${this.apiUrl}/users/${id}`, data);
+  }
+
+  /**
+   * ลบ User (CASCADE ลบ address ด้วย)
+   */
+  remove(id: number): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/users/${id}`);
   }
 }

@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar';
-import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service';
 
 @Component({
@@ -10,10 +9,7 @@ import { ToastService } from './services/toast.service';
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, CommonModule],
   template: `
-    <!-- Navbar แสดงเฉพาะเมื่อ login แล้ว -->
-    @if (authService.isLoggedIn()) {
-      <app-navbar></app-navbar>
-    }
+    <app-navbar></app-navbar>
     
     <router-outlet />
     
@@ -125,6 +121,5 @@ import { ToastService } from './services/toast.service';
   `]
 })
 export class AppComponent {
-  authService = inject(AuthService);
   toastService = inject(ToastService);
 }

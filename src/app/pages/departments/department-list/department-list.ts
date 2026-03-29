@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DepartmentService } from '../../../services/department.service';
 import { ToastService } from '../../../services/toast.service';
+import { Department } from '../../../models/department.model';
 
 @Component({
   selector: 'app-department-list',
@@ -15,7 +16,7 @@ export class DepartmentListComponent implements OnInit {
   private departmentService = inject(DepartmentService);
   private toastService = inject(ToastService);
 
-  departments: any[] = [];
+  departments: Department[] = [];
   loading = false;
   error = '';
 
@@ -28,7 +29,7 @@ export class DepartmentListComponent implements OnInit {
     this.error = '';
     
     this.departmentService.getAll().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         this.departments = res.data;
         this.loading = false;
       },
