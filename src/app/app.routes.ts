@@ -25,5 +25,6 @@ export const routes: Routes = [
     path: 'departments/:id', 
     loadComponent: () => import('./pages/departments/department-detail/department-detail').then(m => m.DepartmentDetailComponent)
   },
+ 
   { path: '**', redirectTo: '/' }
 ];

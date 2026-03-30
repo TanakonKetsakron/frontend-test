@@ -1,6 +1,6 @@
 # HR Management System — Angular Frontend
 
-ระบบจัดการทรัพยากรบุคคล (HR) พัฒนาด้วย Angular 21 (Standalone Components)
+ระบบจัดการทรัพยากรบุคคล (HR) พัฒนาด้วย Angular 17+ (Standalone Components)
 
 ## 🚀 Features
 
@@ -18,11 +18,6 @@
 - ✅ แสดงรายการ Departments พร้อม user_count
 - ✅ ดูรายละเอียด Department พร้อมรายชื่อสมาชิก
 
-### Authentication
-- ✅ Login/Logout ผ่าน Backend API
-- ✅ Route Protection (Auth Guard)
-- ✅ Token-based Authentication
-
 ### UX/UI
 - ✅ Theme เขียว-ขาว (#16a34a)
 - ✅ Loading States
@@ -34,29 +29,29 @@
 ## 📋 Requirements
 
 - Node.js 20+
+- Docker
 - Backend API รันอยู่ที่ `http://localhost:4000`
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Angular 21 (Standalone Components)
-- **Styling:** TailwindCSS 4
-- **State:** Signals
+- **Framework:** Angular 17+ (Standalone Components)
 - **Forms:** ReactiveFormsModule
 - **HTTP:** HttpClient with typed responses
 
 ## 📦 Installation
 
 ```bash
-# Clone repository
-git clone <repository-url>
-cd frontend-test
+# 1. รัน Backend ด้วย Docker
+docker compose up -d --build
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Start development server
-ng serve
+# 3. Start development server
+npm start
 ```
+
+เปิด browser ไปที่ `http://localhost:4200/`
 
 ## 🔧 Configuration
 
@@ -75,21 +70,6 @@ export const environment = {
 };
 ```
 
-## 🚀 Development
-
-```bash
-# Start dev server
-ng serve
-
-# Build for production
-ng build
-
-# Run tests
-ng test
-```
-
-เปิด browser ไปที่ `http://localhost:4200/`
-
 ## 📁 Project Structure
 
 ```
@@ -107,13 +87,9 @@ src/
 │   ├── services/
 │   │   ├── user.service.ts
 │   │   ├── department.service.ts
-│   │   ├── auth.service.ts
-│   │   ├── auth.guard.ts
 │   │   └── toast.service.ts
 │   ├── navbar/
 │   └── pages/
-│       ├── auth/
-│       │   └── login.component.ts
 │       ├── users/
 │       │   ├── user-list/
 │       │   ├── user-detail/
@@ -128,7 +104,6 @@ src/
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /auth/login | Login |
 | GET | /users | List users with filters |
 | GET | /users/:id | Get user detail |
 | POST | /users | Create user |
@@ -161,10 +136,10 @@ src/
 - **department_id:** Optional
 
 ### Address Form (Optional)
-- **house_no:** Required when address enabled
+- **house_no:** Required when address enabled, numbers and / only
 - **street:** Optional
 - **district:** Required when address enabled
-- **province:** Required when address enabled
+- **province:** Required when address enabled, dropdown 77 จังหวัด
 - **postal_code:** Required, 5 digits
 
 ## 📄 License

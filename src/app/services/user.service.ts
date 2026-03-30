@@ -62,4 +62,11 @@ export class UserService {
   remove(id: number): Observable<{ success: boolean; message: string }> {
     return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/users/${id}`);
   }
+
+  /**
+   * ดึงสถิติผู้ใช้ (จำนวน, เพศ, อายุ)
+   */
+  getStatistics(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/statistics`);
+  }
 }
