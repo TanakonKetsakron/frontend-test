@@ -59,24 +59,13 @@ export class UserFormComponent implements OnInit {
 
   // Custom validator: เบอร์โทรต้องเป็นตัวเลข 9-10 หลัก (รองรับ dash ตรงกลาง)
   private phoneValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) return null;
-    const phone = control.value;
-    
-    if (/^-/.test(phone) || /-$/.test(phone)) {
-      return { invalidPhone: true, message: 'เบอร์โทรไม่สามารถขึ้นต้นหรือลงท้ายด้วยเครื่องหมาย - ได้' };
-    }
-    
-    if (!/^[0-9-]+$/.test(phone)) {
-      return { invalidPhone: true, message: 'เบอร์โทรต้องเป็นตัวเลขเท่านั้น' };
-    }
-    
-    const digitsOnly = phone.replace(/-/g, '');
-    if (digitsOnly.length < 9 || digitsOnly.length > 10) {
-      return { invalidPhone: true, message: 'เบอร์โทรต้องมี 9-10 หลัก' };
-    }
-    
-    return null;
+  if (!control.value) return null;
+  const digitsOnly = control.value.replace(/-/g, '');
+  if (digitsOnly.length < 9 || digitsOnly.length > 10) {
+    return { invalidPhone: true, message: 'เบอร์โทรต้องมี 9-10 หลัก' };
   }
+  return null;
+}
 
   userForm: FormGroup = this.fb.group({
     first_name: ['', [Validators.required, Validators.minLength(2), this.nameValidator]],
@@ -189,11 +178,26 @@ export class UserFormComponent implements OnInit {
   }
 
   // กรองให้กรอกได้เฉพาะตัวเลขและ dash (สำหรับเบอร์โทร)
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9-]/g, '');
-    this.userForm.get('phone')?.setValue(input.value);
+ onPhoneInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  
+  // เอาเฉพาะตัวเลข
+  let digits = input.value.replace(/[^0-9]/g, '');
+  
+  // จำกัด 10 หลัก
+  digits = digits.substring(0, 10);
+  
+  // ใส่ - อัตโนมัติ: XXX-XXX-XXXX
+  let formatted = digits;
+  if (digits.length > 6) {
+    formatted = digits.slice(0, 3) + '-' + digits.slice(3, 6) + '-' + digits.slice(6);
+  } else if (digits.length > 3) {
+    formatted = digits.slice(0, 3) + '-' + digits.slice(3);
   }
+  
+  input.value = formatted;
+  this.userForm.get('phone')?.setValue(formatted);
+}
 
   // กรองให้กรอกได้เฉพาะตัวอักษร
   onNameInput(event: Event, fieldName: string): void {
