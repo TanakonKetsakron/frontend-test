@@ -15,6 +15,7 @@
           <input type="text" formControlName="first_name" class="form-input" 
                  [class.error]="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched"
                  (input)="onNameInput($event, 'first_name')"
+                 maxlength="10"
                  placeholder="กรอกชื่อ">
           <span class="hint-text">ใส่ได้เฉพาะตัวอักษรภาษาไทยหรืออังกฤษ</span>
           @if (getErrorMessage('first_name')) {
@@ -26,6 +27,7 @@
           <input type="text" formControlName="last_name" class="form-input"
                  [class.error]="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched"
                  (input)="onNameInput($event, 'last_name')"
+                 maxlength="10"
                  placeholder="กรอกนามสกุล">
           <span class="hint-text">ใส่ได้เฉพาะตัวอักษรภาษาไทยหรืออังกฤษ</span>
           @if (getErrorMessage('last_name')) {
@@ -67,6 +69,7 @@
         <label class="form-label">อีเมล <span class="required">*</span></label>
         <input type="email" formControlName="email" class="form-input"
                [class.error]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+               maxlength="20"
                placeholder="example@email.com">
         <span class="hint-text">รูปแบบ: example&#64;email.com</span>
         @if (getErrorMessage('email')) {
@@ -112,12 +115,12 @@
         <div class="address-form" formGroupName="address">
           <h3 class="section-title">📍 ที่อยู่</h3>
           
-          <!-- บ้านเลขที่ — รับเฉพาะตัวเลขและ / -->
           <div class="form-group">
             <label class="form-label">บ้านเลขที่ <span class="required">*</span></label>
             <input type="text" formControlName="house_no" class="form-input"
                    [class.error]="userForm.get('address.house_no')?.invalid && userForm.get('address.house_no')?.touched"
                    (input)="onHouseNoInput($event)"
+                   maxlength="10"
                    placeholder="เช่น 123 หรือ 123/45">
             <span class="hint-text">กรอกได้เฉพาะตัวเลขและ /</span>
             @if (userForm.get('address.house_no')?.invalid && userForm.get('address.house_no')?.touched) {
@@ -128,6 +131,7 @@
           <div class="form-group">
             <label class="form-label">ถนน <span class="optional">(ไม่บังคับ)</span></label>
             <input type="text" formControlName="street" class="form-input"
+                   maxlength="20"
                    placeholder="ชื่อถนน">
             <span class="hint-text">กรอกชื่อถนน (เว้นว่างได้)</span>
           </div>
@@ -137,13 +141,13 @@
               <label class="form-label">อำเภอ/เขต <span class="required">*</span></label>
               <input type="text" formControlName="district" class="form-input"
                      [class.error]="userForm.get('address.district')?.invalid && userForm.get('address.district')?.touched"
+                     maxlength="20"
                      placeholder="ชื่ออำเภอ/เขต">
               @if (userForm.get('address.district')?.invalid && userForm.get('address.district')?.touched) {
                 <span class="error-text">กรุณากรอกอำเภอ/เขต</span>
               }
             </div>
 
-            <!-- จังหวัด — Dropdown -->
             <div class="form-group">
               <label class="form-label">จังหวัด <span class="required">*</span></label>
               <select formControlName="province" class="form-input"
@@ -161,7 +165,8 @@
 
           <div class="form-group">
             <label class="form-label">รหัสไปรษณีย์ <span class="required">*</span></label>
-            <input type="text" formControlName="postal_code" class="form-input" maxlength="5"
+            <input type="text" formControlName="postal_code" class="form-input"
+                   maxlength="5"
                    [class.error]="userForm.get('address.postal_code')?.invalid && userForm.get('address.postal_code')?.touched"
                    (input)="onNumberInput($event, 'address.postal_code')"
                    placeholder="เช่น 10110">
@@ -171,7 +176,6 @@
       }
     </div>
 
-    <!-- Error Message -->
     @if (errorMsg) {
       <div class="error-box">
         <strong>⚠️ กรุณาแก้ไขข้อผิดพลาด:</strong>
@@ -179,7 +183,6 @@
       </div>
     }
 
-    <!-- Actions -->
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" [disabled]="loading">
         @if (loading) {
